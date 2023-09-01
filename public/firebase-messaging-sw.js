@@ -14,12 +14,27 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-onBackgroundMessage(messaging, (payload) => {
-  console.log(
-    "[firebase-messaging-sw.js] Received background message ",
-    payload
-  );
+ onMessage(messaging, (payload) => {
+  if (self.Notification && self.Notification.permission === "granted") {
+    self.registration.showNotification(payload.notification.title, {
+      body: payload.notification.body,
+      icon: "/pwa/icon-512x512.png",
+      badge: "/favicon.ico",
+      tag: "renotify",
+      renotify: true,
+      //actions: [{ action: 'google', url: "https://www.google.fr" }]
+    }).then(() => self.registration.getNotifications())
+      .then((notifications) => {
+        setTimeout(() => notifications.forEach((notification) => notification.close()), 3000);
+      });
+  }
+  });
 
+onBackgroundMessage(messaging, (payload) => {
+  // console.log(
+  //   "[firebase-messaging-sw.js] Received background message ",
+  //   payload
+  // );
   if (!(self.Notification && self.Notification.permission === "granted")) {
     return;
   }
