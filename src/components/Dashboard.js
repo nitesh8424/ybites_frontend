@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { auth, messaging } from "../firebase";
+import { auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import "firebase/compat/auth";
 import "firebase/messaging";
