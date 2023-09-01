@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { auth } from "../firebase";
+import { auth, messaging } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import "firebase/compat/auth";
 import "firebase/messaging";
@@ -56,6 +56,22 @@ const Dashboard = () => {
     getTokenAndSubscribe();
   }, []);
 
+  messaging.onMessage((payload) => {
+  if (self.Notification && self.Notification.permission === "granted") {
+    self.registration.showNotification(payload.notification.title, {
+      body: payload.notification.body,
+      icon: "/pwa/icon-512x512.png",
+      badge: "/favicon.ico",
+      tag: "renotify",
+      renotify: true,
+      //actions: [{ action: 'google', url: "https://www.google.fr" }]
+    }).then(() => self.registration.getNotifications())
+      .then((notifications) => {
+        setTimeout(() => notifications.forEach((notification) => notification.close()), 3000);
+      });
+  }
+  });
+  
   const handleLogout = () => {
     navigate("/login");
   };
