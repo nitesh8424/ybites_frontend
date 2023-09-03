@@ -37,8 +37,8 @@ const Registration = () => {
 
   const handleRegistration = async (e) => {
     e.preventDefault();
-    if (fcmToken) {
-      console.log("token", fcmToken);
+    // if (fcmToken) {
+    //   console.log("token", fcmToken);
       await createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           updateProfile(userCredential.user, {
@@ -57,7 +57,7 @@ const Registration = () => {
           setError(errorMessage);
           console.log(errorCode, errorMessage);
         });
-    }
+    // }
   };
 
   return (
